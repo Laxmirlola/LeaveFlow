@@ -1,12 +1,18 @@
 -- ============================================================
--- Employee Leave Management System - Database Schema
+-- Employee Leave Management System - Hosting Import Schema
+-- Import this into your existing hosting database.
+-- Do not run this on a database that contains data you need to keep.
 -- ============================================================
 
-CREATE DATABASE IF NOT EXISTS leave_management;
-USE leave_management;
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS leave_requests;
+DROP TABLE IF EXISTS leave_balances;
+DROP TABLE IF EXISTS leave_types;
+DROP TABLE IF EXISTS users;
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- Users table
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
@@ -18,14 +24,14 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Leave types table
-CREATE TABLE IF NOT EXISTS leave_types (
+CREATE TABLE leave_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     color VARCHAR(20) DEFAULT '#6366f1'
 );
 
 -- Leave balances table
-CREATE TABLE IF NOT EXISTS leave_balances (
+CREATE TABLE leave_balances (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     leave_type_id INT NOT NULL,
@@ -38,7 +44,7 @@ CREATE TABLE IF NOT EXISTS leave_balances (
 );
 
 -- Leave requests table
-CREATE TABLE IF NOT EXISTS leave_requests (
+CREATE TABLE leave_requests (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     leave_type_id INT NOT NULL,
@@ -56,10 +62,6 @@ CREATE TABLE IF NOT EXISTS leave_requests (
     FOREIGN KEY (reviewed_by) REFERENCES users(id)
 );
 
--- ============================================================
--- SEED DATA
--- ============================================================
-
 -- Leave types
 INSERT INTO leave_types (name, color) VALUES
 ('Vacation', '#6366f1'),
@@ -70,27 +72,23 @@ INSERT INTO leave_types (name, color) VALUES
 
 -- Default password for all users: "password123" (bcrypt hash)
 INSERT INTO users (name, email, password, role, department, avatar) VALUES
-('Sarah Johnson', 'manager@company.com', '$2y$10$zhIpjQPllmm9kNDuTgGUmOe4O25wl1El8iAlcCItPMCY7gk6wxXrK', 'manager', 'Human Resources', '👩'),
-('Alex Thompson', 'alex@company.com', '$2y$10$zhIpjQPllmm9kNDuTgGUmOe4O25wl1El8iAlcCItPMCY7gk6wxXrK', 'employee', 'Engineering', '👨'),
-('Priya Patel', 'priya@company.com', '$2y$10$zhIpjQPllmm9kNDuTgGUmOe4O25wl1El8iAlcCItPMCY7gk6wxXrK', 'employee', 'Design', '👩'),
-('Marcus Chen', 'marcus@company.com', '$2y$10$zhIpjQPllmm9kNDuTgGUmOe4O25wl1El8iAlcCItPMCY7gk6wxXrK', 'employee', 'Marketing', '🧑'),
-('Emily Davis', 'emily@company.com', '$2y$10$zhIpjQPllmm9kNDuTgGUmOe4O25wl1El8iAlcCItPMCY7gk6wxXrK', 'employee', 'Finance', '👩');
+('Sarah Johnson', 'manager@company.com', '$2y$10$zhIpjQPllmm9kNDuTgGUmOe4O25wl1El8iAlcCItPMCY7gk6wxXrK', 'manager', 'Human Resources', NULL),
+('Alex Thompson', 'alex@company.com', '$2y$10$zhIpjQPllmm9kNDuTgGUmOe4O25wl1El8iAlcCItPMCY7gk6wxXrK', 'employee', 'Engineering', NULL),
+('Priya Patel', 'priya@company.com', '$2y$10$zhIpjQPllmm9kNDuTgGUmOe4O25wl1El8iAlcCItPMCY7gk6wxXrK', 'employee', 'Design', NULL),
+('Marcus Chen', 'marcus@company.com', '$2y$10$zhIpjQPllmm9kNDuTgGUmOe4O25wl1El8iAlcCItPMCY7gk6wxXrK', 'employee', 'Marketing', NULL),
+('Emily Davis', 'emily@company.com', '$2y$10$zhIpjQPllmm9kNDuTgGUmOe4O25wl1El8iAlcCItPMCY7gk6wxXrK', 'employee', 'Finance', NULL);
 
 -- Leave balances for current year (2026)
 INSERT INTO leave_balances (user_id, leave_type_id, total_days, used_days, year) VALUES
--- Alex Thompson
 (2, 1, 15, 3, 2026),
 (2, 2, 10, 1, 2026),
 (2, 3, 5, 0, 2026),
--- Priya Patel
 (3, 1, 15, 5, 2026),
 (3, 2, 10, 2, 2026),
 (3, 3, 5, 1, 2026),
--- Marcus Chen
 (4, 1, 15, 0, 2026),
 (4, 2, 10, 3, 2026),
 (4, 3, 5, 0, 2026),
--- Emily Davis
 (5, 1, 15, 7, 2026),
 (5, 2, 10, 0, 2026),
 (5, 3, 5, 2, 2026);
