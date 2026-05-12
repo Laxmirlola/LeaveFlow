@@ -16,6 +16,8 @@ Employee: alex@company.com / password123
 ```
 
 Change or remove the demo users before using this application with real employee data.
+<img width="1919" height="853" alt="image" src="https://github.com/user-attachments/assets/964f527b-e69a-4e1d-a44c-6f82619c957b" />
+
 
 ## Features
 
